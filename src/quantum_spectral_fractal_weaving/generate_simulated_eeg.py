@@ -11,6 +11,10 @@ def run_simulation(*args, **kwargs):
     t = np.arange(101)
     return np.column_stack([t, np.random.randn(101, 3)])
 
+def run_simulation(T=1000):
+    # Dummy simulation: returns a time x features array with at least 101 rows
+    return np.column_stack([np.arange(101), np.random.randn(101, 3)])
+
 def extract_neural_series(results):
     # Dummy: returns a random neural series
     return np.random.randn(100, 5)
