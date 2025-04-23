@@ -11,6 +11,25 @@ def _force_int32_indices(mat):
         mat.indptr = mat.indptr.astype(np.int32)
     return mat
 
+import qutip
+_qobj_add = qutip.Qobj.__add__
+_qobj_mul = qutip.Qobj.__mul__
+
+def _patched_add(self, other):
+    res = _qobj_add(self, other)
+    if hasattr(res.data, 'indices'):
+        res.data = _force_int32_indices(res.data)
+    return res
+
+def _patched_mul(self, other):
+    res = _qobj_mul(self, other)
+    if hasattr(res.data, 'indices'):
+        res.data = _force_int32_indices(res.data)
+    return res
+
+qutip.Qobj.__add__ = _patched_add
+qutip.Qobj.__mul__ = _patched_mul
+
 _original_destroy = qt.destroy
 def destroy_int32(dim, *args, **kwargs):
     mat = _original_destroy(dim, *args, **kwargs)
