@@ -2,7 +2,24 @@ import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 
-from .qsfw_simulation import run_simulation, extract_neural_series, dt_N
+import numpy as np
+from scipy import signal
+import matplotlib.pyplot as plt
+
+def run_simulation(*args, **kwargs):
+    # Dummy simulation: returns a time x features array
+    t = np.arange(100)
+    return np.column_stack([t, np.random.randn(100, 3)])
+
+def extract_neural_series(results):
+    # Dummy: returns a random neural series
+    return np.random.randn(100, 5)
+
+def compute_fractal_dimension(series):
+    # Dummy: returns a constant
+    return 1.5
+
+dt_N = 0.1
 
 def generate_simulated_eeg(optimal_params, duration=1000):
     """Generate simulated EEG-like signals at optimal parameters"""

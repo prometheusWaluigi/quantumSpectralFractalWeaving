@@ -3,6 +3,16 @@ import qutip as qt
 from scipy import signal
 import matplotlib.pyplot as plt
 
+def run_simulation(*args, **kwargs):
+    """Stub for run_simulation. Should be implemented in the main simulation module."""
+    raise NotImplementedError("run_simulation is not yet implemented.")
+
+def extract_neural_series(*args, **kwargs):
+    """Stub for extract_neural_series. Should be implemented in the main simulation module."""
+    raise NotImplementedError("extract_neural_series is not yet implemented.")
+
+dt_N = 0.1
+
 def init_quantum_state(dim=4):
     """
     Initialize the quantum subsystem (Level 0).
