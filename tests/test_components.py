@@ -4,7 +4,7 @@ import pytest
 # Test create_lab_notebook.py
 
 def test_create_lab_notebook():
-    mod = importlib.import_module('create_lab_notebook')
+    mod = importlib.import_module('quantum_spectral_fractal_weaving.create_lab_notebook')
     param_set = {"ALPHA": 1.0, "GAMMA": 0.01, "G0": 0.5}
     results_summary = {"mean_coherence": 0.7, "fractal_dimension": 1.5}
     notebook = mod.create_lab_notebook(param_set, results_summary)
@@ -18,7 +18,7 @@ def test_find_critical_ridge():
     import numpy as np
     import matplotlib
     matplotlib.use('Agg')  # For headless testing
-    mod = importlib.import_module('find_critical_ridge')
+    mod = importlib.import_module('quantum_spectral_fractal_weaving.find_critical_ridge')
     # Fake sweep_results structure
     sweep_results = {
         'alpha_gamma': {
@@ -37,7 +37,7 @@ def test_generate_simulated_eeg():
     import numpy as np
     import matplotlib
     matplotlib.use('Agg')
-    mod = importlib.import_module('generate_simulated_eeg')
+    mod = importlib.import_module('quantum_spectral_fractal_weaving.generate_simulated_eeg')
     # Fake optimal_params
     optimal_params = [(1, 0.1, 1.0), (2, 0.2, 1.0), (3, 0.3, 1.0)]
     # Patch run_simulation and extract_neural_series
@@ -54,7 +54,7 @@ def test_parameter_sweep():
     import numpy as np
     import matplotlib
     matplotlib.use('Agg')
-    mod = importlib.import_module('parameter_sweep')
+    mod = importlib.import_module('quantum_spectral_fractal_weaving.parameter_sweep')
     # Patch run_simulation, extract_neural_series, compute_fractal_dimension, calculate_integration
     mod.run_simulation = lambda T=100: np.column_stack([np.arange(100), np.random.randn(100, 3)])
     mod.extract_neural_series = lambda results: np.random.randn(100, 5)
@@ -67,7 +67,7 @@ def test_parameter_sweep():
 # Test qsfw_simulation.py (import and main smoke_test)
 
 def test_qsfw_simulation_import():
-    mod = importlib.import_module('qsfw_simulation')
+    mod = importlib.import_module('quantum_spectral_fractal_weaving.qsfw_simulation')
     assert hasattr(mod, 'smoke_test')
     # Run smoke_test with minimal T for speed
     mod.smoke_test(T=1, dt_N=0.1, dt_q=0.01, q_steps=1, dim=2)
@@ -76,4 +76,4 @@ def test_qsfw_simulation_import():
 
 def test_smoke_test_py():
     # Just check import (file may be empty)
-    importlib.import_module('smoke_test')
+    importlib.import_module('quantum_spectral_fractal_weaving.smoke_test')
