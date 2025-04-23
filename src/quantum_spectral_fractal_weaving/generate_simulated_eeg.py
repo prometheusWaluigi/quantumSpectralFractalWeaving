@@ -7,9 +7,9 @@ from scipy import signal
 import matplotlib.pyplot as plt
 
 def run_simulation(*args, **kwargs):
-    # Dummy simulation: returns a time x features array
-    t = np.arange(100)
-    return np.column_stack([t, np.random.randn(100, 3)])
+    # Dummy simulation: returns a time x features array with at least 101 rows
+    t = np.arange(101)
+    return np.column_stack([t, np.random.randn(101, 3)])
 
 def extract_neural_series(results):
     # Dummy: returns a random neural series
