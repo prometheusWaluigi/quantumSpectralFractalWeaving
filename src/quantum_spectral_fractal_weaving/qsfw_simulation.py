@@ -3,6 +3,23 @@ import qutip as qt
 from scipy import signal
 import matplotlib.pyplot as plt
 
+# --- QuTiP/SciPy int32 indices compatibility patch ---
+def _force_int32_indices(mat):
+    if hasattr(mat, 'indices') and mat.indices.dtype != np.int32:
+        mat.indices = mat.indices.astype(np.int32)
+    if hasattr(mat, 'indptr') and mat.indptr.dtype != np.int32:
+        mat.indptr = mat.indptr.astype(np.int32)
+    return mat
+
+_original_destroy = qt.destroy
+def destroy_int32(dim, *args, **kwargs):
+    mat = _original_destroy(dim, *args, **kwargs)
+    if hasattr(mat, 'data'):
+        mat.data = _force_int32_indices(mat.data)
+    return mat
+qt.destroy = destroy_int32
+# ----------------------------------------------------
+
 def run_simulation(*args, **kwargs):
     """Stub for run_simulation. Should be implemented in the main simulation module."""
     raise NotImplementedError("run_simulation is not yet implemented.")
