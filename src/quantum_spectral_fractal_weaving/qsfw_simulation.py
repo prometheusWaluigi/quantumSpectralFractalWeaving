@@ -5,10 +5,24 @@ import matplotlib.pyplot as plt
 
 # --- QuTiP/SciPy int32 indices compatibility patch ---
 def _force_int32_indices(mat):
+    # Recursively patch all submatrices in case of block or composite sparse matrices
+    import scipy.sparse
     if hasattr(mat, 'indices') and mat.indices.dtype != np.int32:
         mat.indices = mat.indices.astype(np.int32)
     if hasattr(mat, 'indptr') and mat.indptr.dtype != np.int32:
         mat.indptr = mat.indptr.astype(np.int32)
+    # If the matrix contains submatrices (e.g., block matrices), patch them too
+    if hasattr(mat, 'blocks'):
+        for b in mat.blocks:
+            _force_int32_indices(b)
+    # If it's a scipy.sparse.bmat result, patch all submatrices
+    if isinstance(mat, scipy.sparse.bsr_matrix) and hasattr(mat, 'data'):
+        # bsr_matrix stores blocks in .data
+        for i in range(mat.data.shape[0]):
+            for j in range(mat.data.shape[1]):
+                block = mat.data[i, j]
+                if hasattr(block, 'indices'):
+                    _force_int32_indices(block)
     return mat
 
 import qutip
