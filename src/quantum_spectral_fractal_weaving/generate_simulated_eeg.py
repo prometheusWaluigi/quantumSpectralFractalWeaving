@@ -57,13 +57,18 @@ def generate_simulated_eeg(optimal_params, duration=1000):
     for f in band_freqs:
         plt.axvline(x=f, color='k', linestyle='--', alpha=0.3)
     mask = (freqs > 5) & (freqs < 30)
-    slope, intercept = np.polyfit(np.log10(freqs[mask]), 
-                                  np.log10(np.mean(psds, axis=0)[mask]), 1)
-    plt.loglog(freqs[mask], 10**(intercept) * freqs[mask]**slope, 'r--', 
-              linewidth=2, label=f'1/f^{-slope:.2f}')
+    if np.any(mask):
+        slope, intercept = np.polyfit(np.log10(freqs[mask]), 
+                                      np.log10(np.mean(psds, axis=0)[mask]), 1)
+        plt.loglog(freqs[mask], 10**(intercept) * freqs[mask]**slope, 'r--', 
+                  linewidth=2, label=f'1/f^{-slope:.2f}')
+        fractal_dim = (5-slope)/2
+    else:
+        slope, intercept = 0, 0
+        fractal_dim = 0
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Power Spectral Density')
-    plt.title(f'EEG Power Spectra (Fractal Dimension ~{(5-slope)/2:.2f})')
+    plt.title(f'EEG Power Spectra (Fractal Dimension ~{fractal_dim:.2f})')
     plt.legend()
     plt.tight_layout()
     plt.savefig('simulated_eeg.png')
