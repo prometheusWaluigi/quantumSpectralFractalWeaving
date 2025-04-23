@@ -16,12 +16,22 @@ _qobj_add = qutip.Qobj.__add__
 _qobj_mul = qutip.Qobj.__mul__
 
 def _patched_add(self, other):
+    # Patch both operands before addition
+    if hasattr(self, 'data') and hasattr(self.data, 'indices'):
+        self.data = _force_int32_indices(self.data)
+    if hasattr(other, 'data') and hasattr(other.data, 'indices'):
+        other.data = _force_int32_indices(other.data)
     res = _qobj_add(self, other)
     if hasattr(res.data, 'indices'):
         res.data = _force_int32_indices(res.data)
     return res
 
 def _patched_mul(self, other):
+    # Patch both operands before multiplication
+    if hasattr(self, 'data') and hasattr(self.data, 'indices'):
+        self.data = _force_int32_indices(self.data)
+    if hasattr(other, 'data') and hasattr(other.data, 'indices'):
+        other.data = _force_int32_indices(other.data)
     res = _qobj_mul(self, other)
     if hasattr(res.data, 'indices'):
         res.data = _force_int32_indices(res.data)
