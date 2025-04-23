@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 def _force_int32_indices(mat):
     # Recursively patch all submatrices in case of block or composite sparse matrices
     import scipy.sparse
+    import numpy as np
     if hasattr(mat, 'indices') and mat.indices.dtype != np.int32:
         mat.indices = mat.indices.astype(np.int32)
     if hasattr(mat, 'indptr') and mat.indptr.dtype != np.int32:
@@ -24,8 +25,18 @@ def _force_int32_indices(mat):
                 if hasattr(block, 'indices'):
                     _force_int32_indices(block)
     # Patch nested .data.data (e.g., if .data is itself a sparse matrix)
-    if hasattr(mat, 'data') and hasattr(mat.data, 'indices'):
-        _force_int32_indices(mat.data)
+    if hasattr(mat, 'data'):
+        try:
+            # If .data is a numpy array of objects, patch all objects
+            if isinstance(mat.data, np.ndarray) and mat.data.dtype == object:
+                for item in mat.data.flat:
+                    if hasattr(item, 'indices'):
+                        _force_int32_indices(item)
+            # If .data itself has indices, patch recursively
+            if hasattr(mat.data, 'indices'):
+                _force_int32_indices(mat.data)
+        except Exception:
+            pass
     return mat
 
 import qutip
