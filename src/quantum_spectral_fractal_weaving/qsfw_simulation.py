@@ -23,6 +23,9 @@ def _force_int32_indices(mat):
                 block = mat.data[i, j]
                 if hasattr(block, 'indices'):
                     _force_int32_indices(block)
+    # Patch nested .data.data (e.g., if .data is itself a sparse matrix)
+    if hasattr(mat, 'data') and hasattr(mat.data, 'indices'):
+        _force_int32_indices(mat.data)
     return mat
 
 import qutip
