@@ -48,7 +48,7 @@ def generate_simulated_eeg(optimal_params, duration=1000):
     plt.xlabel('Time')
     plt.ylabel('EEG Amplitude')
     plt.title('Simulated EEG Time Series')
-    plt.xlim(results[0, 0], results[100, 0])
+    plt.xlim(results[0, 0], results[min(100, results.shape[0]-1), 0])
     plt.legend()
     plt.subplot(212)
     for i, psd in enumerate(psds[:5]):
